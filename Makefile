@@ -10,3 +10,6 @@ test-coverage:
 
 lint:
 		npx eslint .
+
+open:
+		npx webpack serve
