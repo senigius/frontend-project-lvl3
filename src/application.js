@@ -1,5 +1,6 @@
-import * as yup from 'yup';
 import onChange from 'on-change';
+import validateUrl from './validateUrl';
+import * as _ from 'lodash';
 
 const state = {
     form: {
@@ -12,39 +13,19 @@ const state = {
     },
 };
 
-const schema = yup.string()
-        .matches(
-            /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-            'Enter correct url!'
-        ).required('Please enter website');
-
-const validate = (url) => {
-  try {
-    schema.validateSync(url, { abortEarly: false });
-    return {};
-  } catch (e) {
-    return keyBy(e.inner, 'path');
-  }
-};
-
 const render = (elements) => (path, value, prevValue) => {
     switch (path) {
         case 'form.processState':
           handleProcessState(elements, value);
           break;
-    
+        
+        case 'form.urls':
+          break;
+        
         case 'form.processError':
-          handleProcessError();
+          handleProcessError(elements, value);
           break;
-    
-        case 'form.valid':
-          elements.submitButton.disabled = !value;
-          break;
-    
-        case 'form.errors':
-          renderErrors(elements, value, prevValue);
-          break;
-    
+
         default:
           break;
       }
@@ -52,17 +33,33 @@ const render = (elements) => (path, value, prevValue) => {
 
 
 export default () => {
-    const elements = {
-        form: document.querySelector('rss-form'),
-        input: document.getElementById('url-input'),
-        button: document.querySelector('button[type="submit"]'),
-        posts: document.querySelector('.posts'),
-        feeds: document.querySelector('.feeds'),
-    };
+  const elements = {
+      form: document.querySelector('.rss-form'),
+      input: document.getElementById('url-input'),
+      button: document.querySelector('button[type="submit"]'),
+      posts: document.querySelector('.posts'),
+      feeds: document.querySelector('.feeds'),
+  };
 
-    const stateOnChange = onChange(state, render(elements));
+  const state = onChange({
+    form: {
+        valid: 'true',
+        processState: '',
+        processError: null,
+        errors: {},
+        urls: [],
+        data: '',
+    },
+}, render(elements));
 
-    elements.input.addEventListener('change', (e) => {
+elements.form.focus();
 
-    })
-}
+  elements.form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const value = formData.get('url');
+    state.form.errors = validateUrl(elements, value, state.form.urls);
+    state.form.valid = _.isEmpty(state.form.errors);
+    state.form.urls.push(value);
+  });
+};
