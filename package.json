@@ -38,7 +38,9 @@
     "workbox-webpack-plugin": "^6.5.2"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "on-change": "^4.0.0",
+    "yup": "^0.32.11"
   },
   "keywords": []
 }
