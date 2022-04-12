@@ -1,13 +1,13 @@
 import * as Yup from 'yup';
 import * as _ from 'lodash';
 
-const validateLastUrl = (url, urls) => {
+const validateLastUrl = (url, i18nInstance) => {
     const schema = Yup.string().url();
     try {
         schema.validateSync(url);
         return '';
       } catch (e) {
-        return 'Ссылка должна быть валидным URL';
+        return i18nInstance.t('form.errorInvalidUrl');
       }
 };
 

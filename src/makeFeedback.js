@@ -1,7 +1,6 @@
-const makeFeedback = (elements, feedback) => {
-    elements.feedback.textContent = feedback;
+const makeFeedback = (elements, feedback, i18nInstance) => {
     if (feedback === '') {
-        elements.feedback.textContent = 'RSS успешно загружен';
+        elements.feedback.textContent = i18nInstance.t('form.successInput');
         elements.feedback.classList.remove('text-danger');
         elements.input.classList.remove('border-red');
         elements.feedback.classList.add('text-success');
