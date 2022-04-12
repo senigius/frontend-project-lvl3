@@ -1,17 +1,10 @@
 import onChange from 'on-change';
-import validateUrl from './validateUrl';
 import * as _ from 'lodash';
-
-const state = {
-    form: {
-        valid: 'true',
-        processState: '',
-        processError: null,
-        errors: [],
-        urls: [],
-        data: '',
-    },
-};
+import i18n from 'i18next';
+import ru from './locales/ru.js';
+import en from './locales/en.js';
+import validateUrl from './validateUrl';
+import makeFeedback from './makeFeedback.js';
 
 const render = (elements) => (path, value, prevValue) => {
     switch (path) {
@@ -37,16 +30,27 @@ export default () => {
       form: document.querySelector('.rss-form'),
       input: document.getElementById('url-input'),
       button: document.querySelector('button[type="submit"]'),
+      feedback: document.querySelector('.feedback'),
       posts: document.querySelector('.posts'),
       feeds: document.querySelector('.feeds'),
   };
 
+  const defaultLanguage = 'ru';
+
+  const i18nInstance = i18n.createInstance()
+  .then(i18nInstance.init({
+    lng: defaultLanguage,
+    debug: false,
+    resources: { en, ru },
+  }));
+
   const state = onChange({
     form: {
+        lng: defaultLanguage,
         valid: 'true',
         processState: '',
         processError: null,
-        errors: {},
+        error: '',
         urls: [],
         data: '',
     },
@@ -58,8 +62,14 @@ elements.form.focus();
     e.preventDefault();
     const formData = new FormData(e.target);
     const value = formData.get('url');
-    state.form.errors = validateUrl(elements, value, state.form.urls);
-    state.form.valid = _.isEmpty(state.form.errors);
-    state.form.urls.push(value);
+    state.form.error = validateUrl(value);
+    if (state.form.urls.includes(value)) {
+      state.form.error = 'RSS уже существует';
+    }
+    if (state.form.error === '') {
+      state.form.urls.push(value);
+    }
+    makeFeedback(elements, state.form.error);
+    state.form.error = '';
   });
 };
