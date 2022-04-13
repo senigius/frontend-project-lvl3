@@ -39,7 +39,7 @@ const updateFeeds = (state) => () => {
             const { error, posts: newPosts } = parsedData;
             if (error) return;
             const [feedPosts, otherPosts] = _.partition(state.posts, { feedId: id });
-            if (_.isEqual(feedPosts, newPosts)) {
+            if (!_.isEqual(feedPosts, newPosts)) {
                 state.form.posts = [...otherPosts, ...newPosts];
             }
         });
