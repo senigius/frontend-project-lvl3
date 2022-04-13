@@ -5,6 +5,8 @@ import en from './locales/en.js';
 import renderFormState from './render/renderFormState.js';
 import renderFeedback from './render/renderFeedback.js';
 import handleSubmit from './handleSubmit.js';
+import renderFeeds from './render/renderFeeds.js';
+import renderPosts from './render/renderPosts.js';
 
 const render = (elements) => (path, value) => {
     switch (path) {
@@ -18,6 +20,14 @@ const render = (elements) => (path, value) => {
         
         case 'form.feedback':
           renderFeedback(value, elements);
+          break;
+        
+        case 'form.feeds':
+          renderFeeds(value, elements);
+          break;
+
+        case 'form.posts':
+          renderPosts(value, elements);
           break;
 
         default:

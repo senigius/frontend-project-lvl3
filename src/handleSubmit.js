@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import _ from 'lodash';
 import parse from './parser.js';
 import i18n from 'i18next';
+import refreshTimeout from './refreshTimeout.js'
 
 const allOrigins = 'https://allorigins.hexlet.app/get?url=';
 
@@ -45,7 +46,9 @@ const updateFeeds = (state) => () => {
     });
 };
 
-const handleSubmit = (state) => (e) => {
+const handleSubmit = (state) => {
+    const { start: onSuccess, stop: onSubmit } = refreshTimeout(updateFeeds(state));
+    return (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const url = formData.get('url');
@@ -53,6 +56,7 @@ const handleSubmit = (state) => (e) => {
             .then(() => {
                 state.form.state = 'processing';
                 state.form.feedback = '';
+                onSubmit();
                 return fetchData(url);
             })
             .then((response) => {
@@ -63,7 +67,7 @@ const handleSubmit = (state) => (e) => {
                 state.form.feeds.push({ description, id, title, url });
                 state.form.posts.push(...posts);
                 state.form.feedback = i18n.t('form.successInput');
-                console.log(state.form)
+                onSuccess();
                 return parsedData;
             })
             .catch((error) => {
@@ -71,5 +75,5 @@ const handleSubmit = (state) => (e) => {
                 state.form.feedback = error.message;
             });
     };
-
+};
 export default handleSubmit;

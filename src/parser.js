@@ -17,12 +17,12 @@ export default (response) => {
         title: post.querySelector('title').textContent,
         read: false,
     }));
-    const feedTitle = data.querySelector('channel title').textContent;
-    const feedDescription = data.querySelector('channel description').textContent;
+    const title = data.querySelector('channel title').textContent;
+    const description = data.querySelector('channel description').textContent;
 
     return {
-        feedDescription,
-        feedTitle,
+        description,
+        title,
         id: feedId,
         posts,
     };
