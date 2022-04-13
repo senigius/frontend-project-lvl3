@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as yup from 'yup';
-import _ from 'lodash';
+import { find, isEqual } from 'lodash';
 import parse from './parser.js';
 import i18n from 'i18next';
 import refreshTimeout from './refreshTimeout.js'
@@ -27,7 +27,7 @@ const validate = (url) => {
 
 const validateForm = (state, url) =>
     validate(url).then(() => {
-        if (_.find(state.form.feeds, url)) {
+        if (find(state.form.feeds, url)) {
             throw new Error (i18n.t('form.errorDublicate'));
         }
     });
@@ -39,7 +39,7 @@ const updateFeeds = (state) => () => {
             const { error, posts: newPosts } = parsedData;
             if (error) return;
             const [feedPosts, otherPosts] = _.partition(state.posts, { feedId: id });
-            if (!_.isEqual(feedPosts, newPosts)) {
+            if (!isEqual(feedPosts, newPosts)) {
                 state.form.posts = [...otherPosts, ...newPosts];
             }
         });

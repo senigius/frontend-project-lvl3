@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: "./src/index.js",
   output: {
     filename: 'main.js',
@@ -13,6 +13,11 @@ module.exports = {
       template: "index.html",
     }),
   ],
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000
+  },
   module: {
     rules: [
       {

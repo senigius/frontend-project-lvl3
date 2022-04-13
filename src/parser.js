@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import uniqueId from 'lodash';
 import i18n from 'i18next';
 
 export default (response) => {
@@ -7,7 +7,7 @@ export default (response) => {
     const error = data.querySelector('parseerror');
     if (error) return { error: i18n.t('form.errorLinkDoNotProvideRSS') };
     
-    const feedId = _.uniqueId();
+    const feedId = uniqueId();
     const postsElements = [...data.querySelectorAll('channel item')];
     const posts = postsElements.map((post) => ({
         description: post.querySelector('description').textContent,
