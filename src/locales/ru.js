@@ -8,6 +8,7 @@ export default {
             inputButton: 'Добавить',
             errorDublicate: 'RSS уже существует',
             errorInvalidUrl: 'Ссылка должна быть валидным URL',
+            errorLinkDoNotProvideRSS: 'Ресурс не содержит валидный RSS',
             successInput: 'RSS успешно загружен',
         },
         feeds: 'Фиды',

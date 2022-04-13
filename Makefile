@@ -12,4 +12,4 @@ lint:
 		npx eslint .
 
 open:
-		vercel dev
+		npm run serve
