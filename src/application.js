@@ -3,7 +3,7 @@ import i18n from 'i18next';
 import ru from './locales/ru.js';
 import handleSubmit from './handleSubmit.js';
 import render from './render/index.js';
-
+import handleClick from './handleClick.js';
 
 export default () => {
   const defaultLanguage = 'ru';
@@ -21,8 +21,6 @@ export default () => {
       feedback: document.querySelector('.feedback'),
       posts: document.querySelector('.posts'),
       feeds: document.querySelector('.feeds'),
-      en: document.querySelector('button[name="en"]'),
-      ru: document.querySelector('button[name="ru"]'),
   };
 
   const state = onChange({
@@ -33,8 +31,11 @@ export default () => {
         feeds: [],
         posts: [],
     },
+    openedPostId: '',
+    readPosts: [],
   }, render(elements));
 
   elements.form.focus();
   elements.form.addEventListener('submit', handleSubmit(state));
+  elements.posts.addEventListener('click', handleClick(state));
 };

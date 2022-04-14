@@ -1,15 +1,26 @@
 import axios from 'axios';
 import * as yup from 'yup';
-import { find, isEqual } from 'lodash';
+import * as _ from 'lodash';
 import parse from './parser.js';
 import i18n from 'i18next';
-import refreshTimeout from './refreshTimeout.js'
 
+const stateConstants = {
+    processing: 'processing',
+    success: 'success',
+    invalid: 'invalid',
+};
+
+// каждые 5 секунд проверка на новые посты
+const timeout = 5000;
+const delay = 5000;
+
+// avoid Same-origin policy problems when pulling content
 const allOrigins = 'https://allorigins.hexlet.app/get?url=';
 
 const fetchData = (url) =>
     axios
-        .get(`${allOrigins}${encodeURIComponent(url)}`, { params: { disableCache: true } })
+        .get(`${allOrigins}${encodeURIComponent(url)}`,
+         { timeout: delay, params: { disableCache: true } })
         .then((response) => response)
         .catch(() => Promise.reject(new Error(i18n.t('form.errorNetwork'))));
 
@@ -25,36 +36,41 @@ const validate = (url) => {
 
 const validateForm = (state, url) =>
     validate(url).then(() => {
-        if (find(state.form.feeds, url)) {
+        if (_.find(state.form.feeds, { url })) {
             throw new Error (i18n.t('form.errorDublicate'));
         }
     });
 
-const updateFeeds = (state) => () => {
-    state.form.feeds.forEach(({ id, url }) => {
-        fetchData(url).then((response) => {
-            const parsedData = parse(response);
-            const { error, posts: newPosts } = parsedData;
-            if (error) return;
-            const [feedPosts, otherPosts] = _.partition(state.posts, { feedId: id });
-            if (!isEqual(feedPosts, newPosts)) {
-                state.form.posts = [...otherPosts, ...newPosts];
-            }
+const updateFeeds = (state) => {
+    const promises = state.form.feeds
+        .map(({ id, url }) => fetchData(url)
+            .then((response) => {
+                const parsedData = parse(response);
+                const { error, posts: newPosts } = parsedData;
+                if (error) return;
+                const oldData = state.form.posts.filter(({ feedId }) => feedId === id);
+                
+                if (!_.isEqual(oldData, newPosts)) {
+                    state.form.posts = [...otherPosts, ...newPosts];
+                }
+            })
+            .catch((e) => console.log(e)));
+    Promise.all(promises)
+        .finally(() => {
+            setTimeout(() => updateFeeds(state), delay);
         });
-    });
 };
 
 const handleSubmit = (state) => {
-    const { start: onSuccess, stop: onSubmit } = refreshTimeout(updateFeeds(state));
+    setTimeout(() => updateFeeds(state), timeout);
     return (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const url = formData.get('url');
         validateForm(state, url)
             .then(() => {
-                state.form.state = 'processing';
+                state.form.state = stateConstants.processing;
                 state.form.feedback = '';
-                onSubmit();
                 return fetchData(url);
             })
             .then((response) => {
@@ -64,15 +80,14 @@ const handleSubmit = (state) => {
                     state.form.feedback = error;
                     return;
                 };
-                state.form.state = 'success';
+                state.form.state = stateConstants.success;
                 state.form.feeds.push({ description, id, title, url });
                 state.form.posts.push(...posts);
                 state.form.feedback = i18n.t('form.successInput');
-                onSuccess();
                 return parsedData;
             })
             .catch((error) => {
-                state.form.state = 'invalid';
+                state.form.state = stateConstants.invalid;
                 state.form.feedback = error.message;
             });
     };

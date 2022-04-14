@@ -2,10 +2,11 @@ import uniqueId from 'lodash';
 import i18n from 'i18next';
 
 export default (response) => {
-    const newParser = new DOMParser();
-    const data = newParser.parseFromString(response.data.contents, 'application/xml');
-    const error = data.querySelector('parsererror');
-    if (error) return { error: i18n.t('form.errorLinkDoNotProvideRSS') };
+    const parser = new DOMParser();
+    const data = parser.parseFromString(response.data.contents, 'application/xml');
+    if (data.querySelector('parsererror')) {
+        return { error: i18n.t('form.errorLinkDoNotProvideRSS') }
+    };
     
     const feedId = uniqueId();
     const postsElements = [...data.querySelectorAll('channel item')];
