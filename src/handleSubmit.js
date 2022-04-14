@@ -7,13 +7,11 @@ import refreshTimeout from './refreshTimeout.js'
 
 const allOrigins = 'https://allorigins.hexlet.app/get?url=';
 
-const fetchData = (url) => {
-    const newUrl = `${allOrigins}${encodeURIComponent(url)}`;
-    return axios
-            .get(newUrl, { params: { disableCache: true } })
-            .then((response) => response)
-            .catch(() => Promise.reject(new Error(i18n.t('form.errorNetwork'))));
-};
+const fetchData = (url) =>
+    axios
+        .get(`${allOrigins}${encodeURIComponent(url)}`, { params: { disableCache: true } })
+        .then((response) => response)
+        .catch(() => Promise.reject(new Error(i18n.t('form.errorNetwork'))));
 
 const validate = (url) => {
     yup.setLocale({
@@ -62,7 +60,10 @@ const handleSubmit = (state) => {
             .then((response) => {
                 const parsedData = parse(response);
                 const { description, error, id, posts, title } = parsedData;
-                if (error) throw new Error(error);
+                if (error) {
+                    state.form.feedback = error;
+                    return;
+                };
                 state.form.state = 'success';
                 state.form.feeds.push({ description, id, title, url });
                 state.form.posts.push(...posts);

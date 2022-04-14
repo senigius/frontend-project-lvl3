@@ -4,7 +4,7 @@ import i18n from 'i18next';
 export default (response) => {
     const newParser = new DOMParser();
     const data = newParser.parseFromString(response.data.contents, 'application/xml');
-    const error = data.querySelector('parseerror');
+    const error = data.querySelector('parsererror');
     if (error) return { error: i18n.t('form.errorLinkDoNotProvideRSS') };
     
     const feedId = uniqueId();
