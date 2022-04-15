@@ -1,8 +1,7 @@
-import onChange from 'on-change';
 import i18n from 'i18next';
 import ru from './locales/ru.js';
 import handleSubmit from './handleSubmit.js';
-import render from './render/index.js';
+import buildWatchedState from './render/index.js';
 import handleClick from './handleClick.js';
 
 export default () => {
@@ -23,19 +22,23 @@ export default () => {
       feeds: document.querySelector('.feeds'),
   };
 
-  const state = onChange({
+  const state = {
+    lng: defaultLanguage,
     form: {
-        lng: defaultLanguage,
         state: '',
         feedback: '',
         feeds: [],
         posts: [],
     },
-    openedPostId: '',
-    readPosts: [],
-  }, render(elements));
+    modal: {
+      openedPostId: null,
+    },
+    viewedPostsIds: [],
+  };
+
+  const watchedState = buildWatchedState(state, elements);
 
   elements.form.focus();
-  elements.form.addEventListener('submit', handleSubmit(state));
-  elements.posts.addEventListener('click', handleClick(state));
+  elements.form.addEventListener('submit', handleSubmit(watchedState));
+  elements.posts.addEventListener('click', handleClick(watchedState));
 };

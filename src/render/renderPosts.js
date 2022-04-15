@@ -22,7 +22,7 @@ const buildPostButton = (id) => {
   return button;
 };
 
-export default (value, elements) => {
+export default (posts, elements, viewedPostsIds) => {
   elements.posts.innerHTML = '';
 
   const postsTitle = document.createElement('h2');
@@ -30,12 +30,14 @@ export default (value, elements) => {
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'mb-5');
 
-  value.forEach(({ title, link, id}) => {
+  posts.forEach(({ title, link, id}) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
     
     const postLink = buildPostLink(title, link, id);
-    postLink.classList.add('fw-bold', 'font-weight-bold');
+    const fontWeight = (viewedPostsIds.includes(id)) ? 'font-weight-normal': 'font-weight-bold';
+    postLink.classList.add(fontWeight);
+  
     const button = buildPostButton(id);
     li.append(postLink, button);
     ul.append(li);

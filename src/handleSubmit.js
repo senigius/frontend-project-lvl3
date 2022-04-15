@@ -17,10 +17,30 @@ const delay = 5000;
 // avoid Same-origin policy problems when pulling content
 const allOrigins = 'https://allorigins.hexlet.app/get?url=';
 
+const normalizeData = (data, url, id = null) => {
+    const feedId = id ?? _.uniqueId();
+    const feed = {
+        id: feedId,
+        title: data.title,
+        description: data.description,
+        url,
+    };
+    const posts = data.posts.map(({ title, description, link }) => {
+        return {
+            id: _.uniqueId(),
+            feedId,
+            title,
+            description,
+            link,
+        };
+    });
+    return { feed, posts };
+};
+
 const fetchData = (url) =>
     axios
-        .get(`${allOrigins}${encodeURIComponent(url)}`,
-         { timeout: delay, params: { disableCache: true } })
+        .get(`${allOrigins}${encodeURIComponent(url)}`, 
+        { timeout: timeout, params: { disableCache: true } })
         .then((response) => response)
         .catch(() => Promise.reject(new Error(i18n.t('form.errorNetwork'))));
 
@@ -45,14 +65,14 @@ const updateFeeds = (state) => {
     const promises = state.form.feeds
         .map(({ id, url }) => fetchData(url)
             .then((response) => {
-                const parsedData = parse(response);
-                const { error, posts: newPosts } = parsedData;
-                if (error) return;
+                const newData = normalizeData(parse(response), url, id);
                 const oldData = state.form.posts.filter(({ feedId }) => feedId === id);
                 
-                if (!_.isEqual(oldData, newPosts)) {
-                    state.form.posts = [...otherPosts, ...newPosts];
-                }
+                const newPosts = _.differenceBy(newData.posts, oldData, 'title');
+                console.log(newPosts)
+                if (!_.isEmpty(newPosts)) {
+                    state.form.posts = [...newPosts, ...state.form.posts];
+                  }
             })
             .catch((e) => console.log(e)));
     Promise.all(promises)
@@ -74,17 +94,11 @@ const handleSubmit = (state) => {
                 return fetchData(url);
             })
             .then((response) => {
-                const parsedData = parse(response);
-                const { description, error, id, posts, title } = parsedData;
-                if (error) {
-                    state.form.feedback = error;
-                    return;
-                };
+                const parsedData = normalizeData(parse(response), url);
                 state.form.state = stateConstants.success;
-                state.form.feeds.push({ description, id, title, url });
-                state.form.posts.push(...posts);
+                state.form.feeds = [parsedData.feed, ...state.form.feeds];
+                state.form.posts = [...parsedData.posts, ...state.form.posts];
                 state.form.feedback = i18n.t('form.successInput');
-                return parsedData;
             })
             .catch((error) => {
                 state.form.state = stateConstants.invalid;
