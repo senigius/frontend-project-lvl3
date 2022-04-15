@@ -6,5 +6,4 @@ export default (state) => (e) => {
 
     state.modal.openedPostId = id;
     state.viewedPostsIds.push(id);
-    console.log(state.viewedPostsIds)
 };

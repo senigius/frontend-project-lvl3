@@ -2,6 +2,7 @@ import renderFormState from './renderFormState.js';
 import renderFeedback from './renderFeedback.js';
 import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
+import renderModal from './renderModal.js';
 import onChange from 'on-change';
 
 export default (state, elements) => {
@@ -28,7 +29,8 @@ export default (state, elements) => {
         break;
       
       case 'modal.openedPostId':
-  
+        const openedPost = watchedState.form.posts.find(({ id }) => id === value);
+        renderModal(openedPost, elements);
         break;
 
       default:

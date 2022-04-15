@@ -35,8 +35,10 @@ export default (posts, elements, viewedPostsIds) => {
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
     
     const postLink = buildPostLink(title, link, id);
-    const fontWeight = (viewedPostsIds.includes(id)) ? 'font-weight-normal': 'font-weight-bold';
-    postLink.classList.add(fontWeight);
+    const fontWeights = viewedPostsIds.includes(id)
+    ? ['fw-normal', 'font-weight-normal', 'text-secondary']
+    : ['fw-bold', 'font-weight-bold'];
+    postLink.classList.add(...fontWeights);
   
     const button = buildPostButton(id);
     li.append(postLink, button);

@@ -69,7 +69,6 @@ const updateFeeds = (state) => {
                 const oldData = state.form.posts.filter(({ feedId }) => feedId === id);
                 
                 const newPosts = _.differenceBy(newData.posts, oldData, 'title');
-                console.log(newPosts)
                 if (!_.isEmpty(newPosts)) {
                     state.form.posts = [...newPosts, ...state.form.posts];
                   }
