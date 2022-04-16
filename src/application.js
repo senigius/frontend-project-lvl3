@@ -4,7 +4,7 @@ import handleSubmit from './handleSubmit.js';
 import buildWatchedState from './render/index.js';
 import handleClick from './handleClick.js';
 
-export default () => {
+const app = () => {
   const defaultLanguage = 'ru';
 
   i18n.init({
@@ -46,3 +46,5 @@ export default () => {
   elements.form.addEventListener('submit', handleSubmit(watchedState));
   elements.posts.addEventListener('click', handleClick(watchedState));
 };
+
+export default app;
