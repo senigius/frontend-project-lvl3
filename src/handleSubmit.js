@@ -41,7 +41,10 @@ const fetchData = (url) =>
     axios
         .get(`${allOrigins}${encodeURIComponent(url)}`, 
         { timeout: timeout, params: { disableCache: true } })
-        .then((response) => response)
+        .then((response) => {
+            console.log(response)
+            return response;
+        })
         .catch(() => Promise.reject(new Error(i18n.t('form.errorNetwork'))));
 
 const validate = (url) => {
