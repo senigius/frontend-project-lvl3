@@ -1,17 +1,17 @@
 /* eslint-disable global-require */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-module.exports = {
+export default {
   mode: 'production',
   entry: './src/index.js',
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve('dist'),
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: './index.html',
     }),
   ],
   performance: {
@@ -29,16 +29,6 @@ module.exports = {
           loader: 'css-loader',
         }, {
           loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              plugins() {
-                return [
-                  // eslint-disable-next-line import/no-unresolved
-                  require('autoprefixer'),
-                ];
-              },
-            },
-          },
         }, {
           loader: 'sass-loader',
         }],
