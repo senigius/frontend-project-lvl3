@@ -29,6 +29,16 @@ module.exports = {
           loader: 'css-loader',
         }, {
           loader: 'postcss-loader',
+          options: {
+            postcssOptions: {
+              plugins() {
+                return [
+                  // eslint-disable-next-line import/no-unresolved
+                  require('autoprefixer'),
+                ];
+              },
+            },
+          },
         }, {
           loader: 'sass-loader',
         }],
