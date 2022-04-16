@@ -1,4 +1,5 @@
-import i18n from "i18next";
+/* eslint-disable no-param-reassign */
+import i18n from 'i18next';
 
 const buildPostLink = (title, link, id) => {
   const aElement = document.createElement('a');
@@ -30,16 +31,16 @@ export default (posts, elements, viewedPostsIds) => {
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'mb-5');
 
-  posts.forEach(({ title, link, id}) => {
+  posts.forEach(({ title, link, id }) => {
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
-    
+
     const postLink = buildPostLink(title, link, id);
     const fontWeights = viewedPostsIds.includes(id)
-    ? ['fw-normal', 'font-weight-normal', 'text-secondary']
-    : ['fw-bold', 'font-weight-bold'];
+      ? ['fw-normal', 'font-weight-normal', 'text-secondary']
+      : ['fw-bold', 'font-weight-bold'];
     postLink.classList.add(...fontWeights);
-  
+
     const button = buildPostButton(id);
     li.append(postLink, button);
     ul.append(li);
@@ -47,4 +48,4 @@ export default (posts, elements, viewedPostsIds) => {
   const fragment = new DocumentFragment();
   fragment.append(postsTitle, ul);
   elements.posts.append(fragment);
-}
+};

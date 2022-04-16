@@ -1,9 +1,9 @@
+import onChange from 'on-change';
 import renderFormState from './renderFormState.js';
 import renderFeedback from './renderFeedback.js';
 import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
 import renderModal from './renderModal.js';
-import onChange from 'on-change';
 
 export default (state, elements) => {
   const watchedState = onChange(state, (path, value) => {
@@ -11,11 +11,11 @@ export default (state, elements) => {
       case 'form.state':
         renderFormState(value, elements);
         break;
-      
+
       case 'form.feedback':
         renderFeedback(value, elements);
         break;
-      
+
       case 'form.feeds':
         renderFeeds(value, elements);
         break;
@@ -27,8 +27,9 @@ export default (state, elements) => {
       case 'viewedPostsIds':
         renderPosts(watchedState.form.posts, elements, value);
         break;
-      
+
       case 'modal.openedPostId':
+        // eslint-disable-next-line no-case-declarations
         const openedPost = watchedState.form.posts.find(({ id }) => id === value);
         renderModal(openedPost, elements);
         break;

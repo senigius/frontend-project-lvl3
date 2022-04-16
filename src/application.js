@@ -14,25 +14,25 @@ export default () => {
   });
 
   const elements = {
-      form: document.querySelector('.rss-form'),
-      input: document.getElementById('url-input'),
-      button: document.querySelector('button[type="submit"]'),
-      feedback: document.querySelector('.feedback'),
-      posts: document.querySelector('.posts'),
-      feeds: document.querySelector('.feeds'),
-      modalForm: document.querySelector('.modal'),
-      modalTitle: document.querySelector('.modal-title'),
-      modalBody: document.querySelector('.modal-body'),
-      modalLink: document.querySelector('.full-article'),
+    form: document.querySelector('.rss-form'),
+    input: document.getElementById('url-input'),
+    button: document.querySelector('button[type="submit"]'),
+    feedback: document.querySelector('.feedback'),
+    posts: document.querySelector('.posts'),
+    feeds: document.querySelector('.feeds'),
+    modalForm: document.querySelector('.modal'),
+    modalTitle: document.querySelector('.modal-title'),
+    modalBody: document.querySelector('.modal-body'),
+    modalLink: document.querySelector('.full-article'),
   };
 
   const state = {
     lng: defaultLanguage,
     form: {
-        state: '',
-        feedback: '',
-        feeds: [],
-        posts: [],
+      state: '',
+      feedback: '',
+      feeds: [],
+      posts: [],
     },
     modal: {
       openedPostId: null,
