@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -30,11 +31,12 @@ module.exports = {
           loader: 'postcss-loader',
           options: {
             postcssOptions: {
-              plugins: function () {
+              plugins() {
                 return [
-                  require('autoprefixer')
+                  // eslint-disable-next-line import/no-unresolved
+                  require('autoprefixer'),
                 ];
-              }
+              },
             },
           },
         }, {
