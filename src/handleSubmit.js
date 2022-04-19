@@ -54,8 +54,7 @@ const validate = (url) => {
 };
 
 const validateForm = (state, url) => validate(url).then(() => {
-  console.log(url);
-  console.log(_.find(state.form.feeds, { url }));
+  if (_.find(state.form.feeds, { url }) === undefined) return;
   if (_.find(state.form.feeds, { url })) {
     throw new Error(i18n.t('form.errorDublicate'));
   }
