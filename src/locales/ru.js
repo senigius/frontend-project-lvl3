@@ -6,7 +6,7 @@ export default {
       errorLinkDoNotProvideRSS: 'Ресурс не содержит валидный RSS',
       errorNetwork: 'Ошибка сети',
       successInput: 'RSS успешно загружен',
-      missingFormState: 'Нет подходящего действия для состояния формы',
+      loading: 'Загрузка',
     },
     feeds: 'Фиды',
     posts: 'Посты',

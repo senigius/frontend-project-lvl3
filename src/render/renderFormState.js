@@ -1,6 +1,4 @@
 /* eslint-disable no-param-reassign */
-import i18n from 'i18next';
-
 export default (value, elements) => {
   switch (value) {
     case 'invalid':
@@ -24,6 +22,6 @@ export default (value, elements) => {
       elements.input.focus();
       break;
     default:
-      throw new Error(i18n.t('form.missingFormState'));
+      throw new Error(`Form state ${value} is missing`);
   }
 };

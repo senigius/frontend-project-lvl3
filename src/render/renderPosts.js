@@ -23,7 +23,7 @@ const buildPostButton = (id) => {
   return button;
 };
 
-export default (posts, elements, viewedPostsIds) => {
+export default (posts, elements) => {
   elements.posts.innerHTML = '';
 
   const postsTitle = document.createElement('h2');
@@ -36,10 +36,7 @@ export default (posts, elements, viewedPostsIds) => {
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
 
     const postLink = buildPostLink(title, link, id);
-    const fontWeights = viewedPostsIds.includes(id)
-      ? ['fw-normal', 'font-weight-normal', 'text-secondary']
-      : ['fw-bold', 'font-weight-bold'];
-    postLink.classList.add(...fontWeights);
+    postLink.classList.add('fw-bold', 'font-weight-bold');
 
     const button = buildPostButton(id);
     li.append(postLink, button);

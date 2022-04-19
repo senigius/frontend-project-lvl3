@@ -1,42 +1,37 @@
-import onChange from 'on-change';
 import renderFormState from './renderFormState.js';
 import renderFeedback from './renderFeedback.js';
 import renderFeeds from './renderFeeds.js';
 import renderPosts from './renderPosts.js';
 import renderModal from './renderModal.js';
+import renderViewedPosts from './renderViewedPosts.js';
 
-export default (state, elements) => {
-  const watchedState = onChange(state, (path, value) => {
-    switch (path) {
-      case 'form.state':
-        renderFormState(value, elements);
-        break;
+export default (elements) => (path, value) => {
+  switch (path) {
+    case 'form.state':
+      renderFormState(value, elements);
+      break;
 
-      case 'form.feedback':
-        renderFeedback(value, elements);
-        break;
+    case 'form.feedback':
+      renderFeedback(value, elements);
+      break;
 
-      case 'form.feeds':
-        renderFeeds(value, elements);
-        break;
+    case 'feeds':
+      renderFeeds(value, elements);
+      break;
 
-      case 'form.posts':
-        renderPosts(value, elements, watchedState.viewedPostsIds);
-        break;
+    case 'posts':
+      renderPosts(value, elements);
+      break;
 
-      case 'viewedPostsIds':
-        renderPosts(watchedState.form.posts, elements, value);
-        break;
+    case 'viewedPosts':
+      renderViewedPosts(value, elements);
+      break;
 
-      case 'modal.openedPostId':
-        // eslint-disable-next-line no-case-declarations
-        const openedPost = watchedState.form.posts.find(({ id }) => id === value);
-        renderModal(openedPost, elements);
-        break;
+    case 'modal.openedPost':
+      renderModal(value, elements);
+      break;
 
-      default:
-        throw new Error(console.log(`Render state ${path} is missing`));
-    }
-  });
-  return watchedState;
+    default:
+      break;
+  }
 };

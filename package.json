@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "RSS-agregator",
   "main": "./src/application.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
@@ -23,7 +23,6 @@
   "homepage": "https://github.com/senigius/frontend-project-lvl3#readme",
   "devDependencies": {
     "@webpack-cli/generators": "^1.1.0",
-    "bootstrap": "^5.1.3",
     "css-loader": "^6.7.1",
     "eslint": "^8.12.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -33,8 +32,7 @@
     "postcss": "^8.4.12",
     "postcss-loader": "^6.2.1",
     "prettier": "^2.6.2",
-    "sass": "^1.50.0",
-    "sass-loader": "^12.6.0",
+    "source-map-loader": "^1.1.3",
     "style-loader": "^3.3.1",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
@@ -43,9 +41,12 @@
   },
   "dependencies": {
     "axios": "^0.26.1",
+    "bootstrap": "^5.1.3",
     "i18next": "^21.6.16",
     "lodash": "^4.17.21",
     "on-change": "^4.0.0",
+    "sass": "^1.50.0",
+    "sass-loader": "^12.6.0",
     "yup": "^0.32.11"
   },
   "keywords": []
