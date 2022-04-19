@@ -40,10 +40,7 @@ const normalizeData = (data, url, feedId = null) => {
 
 const fetchData = (url) => axios
   .get(`${allOrigins}${encodeURIComponent(url)}`, { timeout, params: { disableCache: true } })
-  .then((response) => {
-    console.log(response);
-    return response;
-  })
+  .then((response) => response)
   .catch(() => Promise.reject(new Error(i18n.t('form.errorNetwork'))));
 
 const validate = (url) => {
