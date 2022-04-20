@@ -25,8 +25,9 @@ const timeout = 5000;
 const allOrigins = 'https://allorigins.hexlet.app/get?';
 
 const normalizeData = (data, url, feedId = null) => {
+  feedId = feedId ?? _.uniqueId();
   const feed = {
-    id: feedId ?? _.uniqueId(),
+    id: feedId,
     title: data.title,
     description: data.description,
     url,
@@ -44,7 +45,7 @@ const normalizeData = (data, url, feedId = null) => {
   return { feed, posts };
 };
 
-const addReadedPosts = (posts) => posts
+const addUnReadedPosts = (posts) => posts
   .map((post) => {
     const { id } = post;
     return { postId: id, readed: false };
@@ -67,8 +68,8 @@ const addContent = (url, data, state) => {
 
   state.urls.push(url);
   state.feeds.push(feed);
-  state.posts.push(...posts);
-  state.viewedPosts.push(...addReadedPosts(posts));
+  state.posts.unshift(...posts);
+  state.viewedPosts.push(...addUnReadedPosts(posts));
 };
 
 const updateFeeds = (state) => {
@@ -81,7 +82,7 @@ const updateFeeds = (state) => {
         const newPosts = _.differenceBy(newData.posts, oldData, 'title');
         if (!_.isEmpty(newPosts)) {
           state.posts = [...newPosts, ...state.posts];
-          state.viewedPosts.push(...addReadedPosts(state.posts));
+          state.viewedPosts.push(...addUnReadedPosts(state.posts));
         }
       })
       .catch((e) => {
@@ -100,7 +101,6 @@ export default () => i18n.init({
 })
   .then(() => {
     const state = {
-      lng: defaultLanguage,
       form: {
         state: '',
         feedback: '',
@@ -156,7 +156,6 @@ export default () => i18n.init({
     });
 
     elements.posts.addEventListener('click', (e) => {
-      e.preventDefault();
       const { id } = e.target.dataset;
       if (id) {
         const [reviewPost] = watchedState.posts.filter((post) => post.id === id);
