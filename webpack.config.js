@@ -16,6 +16,11 @@ const config = {
   optimization: {
     usedExports: true,
   },
+  performance: {
+    hints: false,
+    maxEntrypointSize: 400,
+    maxAssetSize: 400,
+  },
   devServer: {
     open: { app: { name: 'Google Chrome' } },
     host: 'localhost',
