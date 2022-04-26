@@ -86,7 +86,10 @@ const updateFeeds = (state) => {
         }
       })
       .catch((e) => {
-        state.form.feedback = e;
+        if (axios.isAxiosError(e)) {
+          state.form.feedback = 'errorUpdate';
+          state.form.state = 'invalid';
+        } else console.log(e);
       }));
   Promise.all(promises)
     .finally(() => {
@@ -147,7 +150,7 @@ export default () => i18n.init({
           watchedState.form.feedback = 'successInput';
         }).catch((error) => {
           watchedState.form.state = stateConstants.invalid;
-          if (error.message === 'Network Error') {
+          if (axios.isAxiosError(error)) {
             watchedState.form.feedback = 'errorNetwork';
           } else if (error.name === 'ValidationError') {
             watchedState.form.feedback = error.message;

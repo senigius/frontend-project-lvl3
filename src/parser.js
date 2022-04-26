@@ -1,10 +1,10 @@
-import i18n from 'i18next';
-
 export default (response) => {
   const parser = new DOMParser();
   const data = parser.parseFromString(response.data.contents, 'application/xml');
-  if (data.querySelector('parsererror')) {
-    throw new Error(i18n.t('form.errorLinkDoNotProvideRSS'));
+
+  const error = data.querySelector('parserError');
+  if (error) {
+    throw new Error(error.textContent);
   }
 
   const postsElements = [...data.querySelectorAll('channel item')];
